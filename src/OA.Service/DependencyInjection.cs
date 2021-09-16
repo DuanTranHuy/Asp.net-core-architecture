@@ -16,6 +16,7 @@ using OA.Service.Implementation;
 using System;
 using System.Reflection;
 using System.Text;
+using Npgsql.EntityFrameworkCore;
 
 namespace OA.Service
 {
@@ -30,18 +31,12 @@ namespace OA.Service
 
         public static void AddIdentityService(this IServiceCollection services, IConfiguration configuration)
         {
-            if (configuration.GetValue<bool>("UseInMemoryDatabase"))
-            {
-                services.AddDbContext<IdentityContext>(options =>
-                    options.UseInMemoryDatabase("IdentityDb"));
-            }
-            else
-            {
-                services.AddDbContext<IdentityContext>(options =>
-                options.UseSqlServer(
-                    configuration.GetConnectionString("IdentityConnection"),
-                    b => b.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName)));
-            }
+
+            services.AddEntityFrameworkNpgsql().AddDbContext<IdentityContext>(options =>
+            options.UseNpgsql(
+                configuration.GetConnectionString("IdentityConnection"),
+                b => b.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName)));
+
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
             #region Services
@@ -53,47 +48,49 @@ namespace OA.Service
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddJwtBearer(o =>
+                .AddJwtBearer(options =>
+                  {
+                      options.Authority = "https://localhost:5001";
+
+                      options.TokenValidationParameters = new TokenValidationParameters
+                      {
+                          ValidateAudience = false
+                      };
+                      options.Events = new JwtBearerEvents()
+                      {
+                          OnAuthenticationFailed = c =>
+                          {
+                              c.NoResult();
+                              c.Response.StatusCode = 500;
+                              c.Response.ContentType = "text/plain";
+                              return c.Response.WriteAsync(c.Exception.ToString());
+                          },
+                          OnChallenge = context =>
+                          {
+                              context.HandleResponse();
+                              context.Response.StatusCode = 401;
+                              context.Response.ContentType = "application/json";
+                              var result = JsonConvert.SerializeObject(new Response<string>("You are not Authorized"));
+                              return context.Response.WriteAsync(result);
+                          },
+                          OnForbidden = context =>
+                          {
+                              context.Response.StatusCode = 403;
+                              context.Response.ContentType = "application/json";
+                              var result = JsonConvert.SerializeObject(new Response<string>("You are not authorized to access this resource"));
+                              return context.Response.WriteAsync(result);
+                          },
+                      };
+                  });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ApiScope", policy =>
                 {
-                    o.RequireHttpsMetadata = false;
-                    o.SaveToken = false;
-                    o.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ClockSkew = TimeSpan.Zero,
-                        ValidIssuer = configuration["JWTSettings:Issuer"],
-                        ValidAudience = configuration["JWTSettings:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWTSettings:Key"]))
-                    };
-                    o.Events = new JwtBearerEvents()
-                    {
-                        OnAuthenticationFailed = c =>
-                        {
-                            c.NoResult();
-                            c.Response.StatusCode = 500;
-                            c.Response.ContentType = "text/plain";
-                            return c.Response.WriteAsync(c.Exception.ToString());
-                        },
-                        OnChallenge = context =>
-                        {
-                            context.HandleResponse();
-                            context.Response.StatusCode = 401;
-                            context.Response.ContentType = "application/json";
-                            var result = JsonConvert.SerializeObject(new Response<string>("You are not Authorized"));
-                            return context.Response.WriteAsync(result);
-                        },
-                        OnForbidden = context =>
-                        {
-                            context.Response.StatusCode = 403;
-                            context.Response.ContentType = "application/json";
-                            var result = JsonConvert.SerializeObject(new Response<string>("You are not authorized to access this resource"));
-                            return context.Response.WriteAsync(result);
-                        },
-                    };
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", "scope1");
                 });
+            });
         }
     }
 }
