@@ -2,77 +2,76 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OA.Persistence;
 
-namespace OA.Persistence.Data.Identity
+namespace OA.Persistence.Data.IdentityDb
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20210916101356_InitialCreate")]
-    partial class InitialCreate
+    partial class IdentityContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Identity")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63)
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.10")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("Role");
 
                     b.HasData(
                         new
                         {
-                            Id = "6cda0025-de85-41f1-b31a-571017ee4b00",
-                            ConcurrencyStamp = "b87705ae-e8e4-4f0c-bb86-20f26e0f8474",
+                            Id = "311acd24-7020-47e3-a297-09352469fc3c",
+                            ConcurrencyStamp = "44af7610-728c-45ee-89e1-d71780bc2e1a",
                             Name = "SuperAdmin",
                             NormalizedName = "SuperAdmin"
                         },
                         new
                         {
-                            Id = "b4980dd0-d6fe-4a89-b090-e1d375eb6575",
-                            ConcurrencyStamp = "d33e676f-8022-4aba-9a3d-6df233281781",
+                            Id = "8b53b354-0805-47be-8646-3d414609e0f9",
+                            ConcurrencyStamp = "b38234cf-859d-4cd4-9c85-7aaa96e286ee",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "a07f4eb8-4c95-4faf-a020-ca2aaeb15bfe",
-                            ConcurrencyStamp = "6ba3428a-2616-4aa8-b3f2-f9dc17ba717f",
+                            Id = "4297214d-361b-48f5-957a-f6b1108d736b",
+                            ConcurrencyStamp = "677ef6bf-0ea5-4579-9351-4c6ca471d0a1",
                             Name = "Moderator",
                             NormalizedName = "Moderator"
                         },
                         new
                         {
-                            Id = "39ce7736-d39e-482b-84c2-4376400e0794",
-                            ConcurrencyStamp = "d7df0c26-dff5-4671-b7b9-4afa5d1fa14d",
+                            Id = "a784f0ad-cbfb-4908-aa4a-3a35fd761d5d",
+                            ConcurrencyStamp = "34da9597-6aee-4f38-a201-2d6699dded79",
                             Name = "Basic",
                             NormalizedName = "Basic"
                         });
@@ -82,18 +81,18 @@ namespace OA.Persistence.Data.Identity
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -106,18 +105,18 @@ namespace OA.Persistence.Data.Identity
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -129,17 +128,17 @@ namespace OA.Persistence.Data.Identity
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -151,10 +150,10 @@ namespace OA.Persistence.Data.Identity
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -165,44 +164,44 @@ namespace OA.Persistence.Data.Identity
                     b.HasData(
                         new
                         {
-                            UserId = "c921f1ec-2d23-4bc9-afc9-fe23ed9e6c07",
-                            RoleId = "39ce7736-d39e-482b-84c2-4376400e0794"
+                            UserId = "1ed8a5f2-2f78-4672-ab60-60056e50cbaa",
+                            RoleId = "a784f0ad-cbfb-4908-aa4a-3a35fd761d5d"
                         },
                         new
                         {
-                            UserId = "1d3a700e-efbc-410f-94f1-a74e3a7cefa5",
-                            RoleId = "6cda0025-de85-41f1-b31a-571017ee4b00"
+                            UserId = "5989dc48-cd9f-4049-87ec-0d89374413eb",
+                            RoleId = "311acd24-7020-47e3-a297-09352469fc3c"
                         },
                         new
                         {
-                            UserId = "1d3a700e-efbc-410f-94f1-a74e3a7cefa5",
-                            RoleId = "b4980dd0-d6fe-4a89-b090-e1d375eb6575"
+                            UserId = "5989dc48-cd9f-4049-87ec-0d89374413eb",
+                            RoleId = "8b53b354-0805-47be-8646-3d414609e0f9"
                         },
                         new
                         {
-                            UserId = "1d3a700e-efbc-410f-94f1-a74e3a7cefa5",
-                            RoleId = "a07f4eb8-4c95-4faf-a020-ca2aaeb15bfe"
+                            UserId = "5989dc48-cd9f-4049-87ec-0d89374413eb",
+                            RoleId = "4297214d-361b-48f5-957a-f6b1108d736b"
                         },
                         new
                         {
-                            UserId = "1d3a700e-efbc-410f-94f1-a74e3a7cefa5",
-                            RoleId = "39ce7736-d39e-482b-84c2-4376400e0794"
+                            UserId = "5989dc48-cd9f-4049-87ec-0d89374413eb",
+                            RoleId = "a784f0ad-cbfb-4908-aa4a-3a35fd761d5d"
                         });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
@@ -212,60 +211,60 @@ namespace OA.Persistence.Data.Identity
             modelBuilder.Entity("OA.Domain.Auth.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
@@ -274,16 +273,17 @@ namespace OA.Persistence.Data.Identity
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("User");
 
                     b.HasData(
                         new
                         {
-                            Id = "1d3a700e-efbc-410f-94f1-a74e3a7cefa5",
+                            Id = "5989dc48-cd9f-4049-87ec-0d89374413eb",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f02d3310-1634-4d49-90fb-fc6f764f2cff",
+                            ConcurrencyStamp = "7859c357-6d97-4a1b-af9f-2a1b66ac3539",
                             Email = "superadmin@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Amit",
@@ -293,15 +293,15 @@ namespace OA.Persistence.Data.Identity
                             NormalizedUserName = "SUPERADMIN",
                             PasswordHash = "AQAAAAEAACcQAAAAEBLjouNqaeiVWbN0TbXUS3+ChW3d7aQIk/BQEkWBxlrdRRngp14b0BIH0Rp65qD6mA==",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "debcf2d1-97ab-41b0-9e1a-c4136b5d0387",
+                            SecurityStamp = "44b04b0e-30d2-4c63-ad2c-46ed50556d86",
                             TwoFactorEnabled = false,
                             UserName = "superadmin"
                         },
                         new
                         {
-                            Id = "c921f1ec-2d23-4bc9-afc9-fe23ed9e6c07",
+                            Id = "1ed8a5f2-2f78-4672-ab60-60056e50cbaa",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "10cc2ac6-2784-4f34-abb4-19c6229dcef6",
+                            ConcurrencyStamp = "c071976b-d42b-40d4-aa12-8572d90de1c7",
                             Email = "basicuser@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Basic",
@@ -311,7 +311,7 @@ namespace OA.Persistence.Data.Identity
                             NormalizedUserName = "BASICUSER",
                             PasswordHash = "AQAAAAEAACcQAAAAEBLjouNqaeiVWbN0TbXUS3+ChW3d7aQIk/BQEkWBxlrdRRngp14b0BIH0Rp65qD6mA==",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "d91dcab3-9711-4cdd-872c-735e7f9a481a",
+                            SecurityStamp = "c16cbf64-30b5-4d96-b9b4-adec20c9e548",
                             TwoFactorEnabled = false,
                             UserName = "basicuser"
                         });
@@ -321,32 +321,32 @@ namespace OA.Persistence.Data.Identity
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ApplicationUserId")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedByIp")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Expires")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ReplacedByToken")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("Revoked")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("RevokedByIp")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Token")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

@@ -32,8 +32,8 @@ namespace OA.Service
         public static void AddIdentityService(this IServiceCollection services, IConfiguration configuration)
         {
 
-            services.AddEntityFrameworkNpgsql().AddDbContext<IdentityContext>(options =>
-            options.UseNpgsql(
+            services.AddDbContext<IdentityContext>(options =>
+            options.UseSqlServer(
                 configuration.GetConnectionString("IdentityConnection"),
                 b => b.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName)));
 

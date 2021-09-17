@@ -1,10 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace OA.Persistence.Data.Identity
+namespace OA.Persistence.Data.IdentityDb
 {
-    public partial class InitialCreate : Migration
+    public partial class InitialApplicationDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,10 +15,10 @@ namespace OA.Persistence.Data.Identity
                 schema: "Identity",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -31,23 +30,23 @@ namespace OA.Persistence.Data.Identity
                 schema: "Identity",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    FirstName = table.Column<string>(type: "text", nullable: true),
-                    LastName = table.Column<string>(type: "text", nullable: true),
-                    UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    PasswordHash = table.Column<string>(type: "text", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "text", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -59,11 +58,11 @@ namespace OA.Persistence.Data.Identity
                 schema: "Identity",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    RoleId = table.Column<string>(type: "text", nullable: false),
-                    ClaimType = table.Column<string>(type: "text", nullable: true),
-                    ClaimValue = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -82,16 +81,16 @@ namespace OA.Persistence.Data.Identity
                 schema: "Identity",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Token = table.Column<string>(type: "text", nullable: true),
-                    Expires = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreatedByIp = table.Column<string>(type: "text", nullable: true),
-                    Revoked = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    RevokedByIp = table.Column<string>(type: "text", nullable: true),
-                    ReplacedByToken = table.Column<string>(type: "text", nullable: true),
-                    ApplicationUserId = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Expires = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedByIp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Revoked = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    RevokedByIp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReplacedByToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -110,11 +109,11 @@ namespace OA.Persistence.Data.Identity
                 schema: "Identity",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    ClaimType = table.Column<string>(type: "text", nullable: true),
-                    ClaimValue = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -133,10 +132,10 @@ namespace OA.Persistence.Data.Identity
                 schema: "Identity",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "text", nullable: false),
-                    ProviderKey = table.Column<string>(type: "text", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "text", nullable: true),
-                    UserId = table.Column<string>(type: "text", nullable: false)
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -155,8 +154,8 @@ namespace OA.Persistence.Data.Identity
                 schema: "Identity",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    RoleId = table.Column<string>(type: "text", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -182,10 +181,10 @@ namespace OA.Persistence.Data.Identity
                 schema: "Identity",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    LoginProvider = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Value = table.Column<string>(type: "text", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -205,10 +204,10 @@ namespace OA.Persistence.Data.Identity
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "6cda0025-de85-41f1-b31a-571017ee4b00", "b87705ae-e8e4-4f0c-bb86-20f26e0f8474", "SuperAdmin", "SuperAdmin" },
-                    { "b4980dd0-d6fe-4a89-b090-e1d375eb6575", "d33e676f-8022-4aba-9a3d-6df233281781", "Admin", "Admin" },
-                    { "a07f4eb8-4c95-4faf-a020-ca2aaeb15bfe", "6ba3428a-2616-4aa8-b3f2-f9dc17ba717f", "Moderator", "Moderator" },
-                    { "39ce7736-d39e-482b-84c2-4376400e0794", "d7df0c26-dff5-4671-b7b9-4afa5d1fa14d", "Basic", "Basic" }
+                    { "311acd24-7020-47e3-a297-09352469fc3c", "44af7610-728c-45ee-89e1-d71780bc2e1a", "SuperAdmin", "SuperAdmin" },
+                    { "8b53b354-0805-47be-8646-3d414609e0f9", "b38234cf-859d-4cd4-9c85-7aaa96e286ee", "Admin", "Admin" },
+                    { "4297214d-361b-48f5-957a-f6b1108d736b", "677ef6bf-0ea5-4579-9351-4c6ca471d0a1", "Moderator", "Moderator" },
+                    { "a784f0ad-cbfb-4908-aa4a-3a35fd761d5d", "34da9597-6aee-4f38-a201-2d6699dded79", "Basic", "Basic" }
                 });
 
             migrationBuilder.InsertData(
@@ -217,8 +216,8 @@ namespace OA.Persistence.Data.Identity
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "1d3a700e-efbc-410f-94f1-a74e3a7cefa5", 0, "f02d3310-1634-4d49-90fb-fc6f764f2cff", "superadmin@gmail.com", true, "Amit", "Naik", false, null, "SUPERADMIN@GMAIL.COM", "SUPERADMIN", "AQAAAAEAACcQAAAAEBLjouNqaeiVWbN0TbXUS3+ChW3d7aQIk/BQEkWBxlrdRRngp14b0BIH0Rp65qD6mA==", null, true, "debcf2d1-97ab-41b0-9e1a-c4136b5d0387", false, "superadmin" },
-                    { "c921f1ec-2d23-4bc9-afc9-fe23ed9e6c07", 0, "10cc2ac6-2784-4f34-abb4-19c6229dcef6", "basicuser@gmail.com", true, "Basic", "User", false, null, "BASICUSER@GMAIL.COM", "BASICUSER", "AQAAAAEAACcQAAAAEBLjouNqaeiVWbN0TbXUS3+ChW3d7aQIk/BQEkWBxlrdRRngp14b0BIH0Rp65qD6mA==", null, true, "d91dcab3-9711-4cdd-872c-735e7f9a481a", false, "basicuser" }
+                    { "5989dc48-cd9f-4049-87ec-0d89374413eb", 0, "7859c357-6d97-4a1b-af9f-2a1b66ac3539", "superadmin@gmail.com", true, "Amit", "Naik", false, null, "SUPERADMIN@GMAIL.COM", "SUPERADMIN", "AQAAAAEAACcQAAAAEBLjouNqaeiVWbN0TbXUS3+ChW3d7aQIk/BQEkWBxlrdRRngp14b0BIH0Rp65qD6mA==", null, true, "44b04b0e-30d2-4c63-ad2c-46ed50556d86", false, "superadmin" },
+                    { "1ed8a5f2-2f78-4672-ab60-60056e50cbaa", 0, "c071976b-d42b-40d4-aa12-8572d90de1c7", "basicuser@gmail.com", true, "Basic", "User", false, null, "BASICUSER@GMAIL.COM", "BASICUSER", "AQAAAAEAACcQAAAAEBLjouNqaeiVWbN0TbXUS3+ChW3d7aQIk/BQEkWBxlrdRRngp14b0BIH0Rp65qD6mA==", null, true, "c16cbf64-30b5-4d96-b9b4-adec20c9e548", false, "basicuser" }
                 });
 
             migrationBuilder.InsertData(
@@ -227,11 +226,11 @@ namespace OA.Persistence.Data.Identity
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "6cda0025-de85-41f1-b31a-571017ee4b00", "1d3a700e-efbc-410f-94f1-a74e3a7cefa5" },
-                    { "b4980dd0-d6fe-4a89-b090-e1d375eb6575", "1d3a700e-efbc-410f-94f1-a74e3a7cefa5" },
-                    { "a07f4eb8-4c95-4faf-a020-ca2aaeb15bfe", "1d3a700e-efbc-410f-94f1-a74e3a7cefa5" },
-                    { "39ce7736-d39e-482b-84c2-4376400e0794", "1d3a700e-efbc-410f-94f1-a74e3a7cefa5" },
-                    { "39ce7736-d39e-482b-84c2-4376400e0794", "c921f1ec-2d23-4bc9-afc9-fe23ed9e6c07" }
+                    { "311acd24-7020-47e3-a297-09352469fc3c", "5989dc48-cd9f-4049-87ec-0d89374413eb" },
+                    { "8b53b354-0805-47be-8646-3d414609e0f9", "5989dc48-cd9f-4049-87ec-0d89374413eb" },
+                    { "4297214d-361b-48f5-957a-f6b1108d736b", "5989dc48-cd9f-4049-87ec-0d89374413eb" },
+                    { "a784f0ad-cbfb-4908-aa4a-3a35fd761d5d", "5989dc48-cd9f-4049-87ec-0d89374413eb" },
+                    { "a784f0ad-cbfb-4908-aa4a-3a35fd761d5d", "1ed8a5f2-2f78-4672-ab60-60056e50cbaa" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -245,7 +244,8 @@ namespace OA.Persistence.Data.Identity
                 schema: "Identity",
                 table: "Role",
                 column: "NormalizedName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleClaims_RoleId",
@@ -264,7 +264,8 @@ namespace OA.Persistence.Data.Identity
                 schema: "Identity",
                 table: "User",
                 column: "NormalizedUserName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserClaims_UserId",

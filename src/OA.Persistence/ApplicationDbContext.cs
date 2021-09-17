@@ -32,7 +32,7 @@ namespace OA.Persistence
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder
-                .UseNpgsql("DataSource=app.db");
+                .UseSqlServer("DataSource=app.db");
             }
 
         }

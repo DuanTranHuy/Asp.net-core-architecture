@@ -24,8 +24,8 @@ namespace OA.Infrastructure.Extension
         public static void AddDbContext(this IServiceCollection serviceCollection,
              IConfiguration configuration, IConfigurationRoot configRoot)
         {
-            serviceCollection.AddEntityFrameworkNpgsql().AddDbContext<ApplicationDbContext>(options =>
-                   options.UseNpgsql(configuration.GetConnectionString("OnionArchConn") ?? configRoot["ConnectionStrings:OnionArchConn"]
+            serviceCollection.AddDbContext<ApplicationDbContext>(options =>
+                   options.UseSqlServer(configuration.GetConnectionString("OnionArchConn") ?? configRoot["ConnectionStrings:OnionArchConn"]
                 , b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
 
@@ -130,7 +130,7 @@ namespace OA.Infrastructure.Extension
             serviceCollection.AddHealthChecks()
                 .AddDbContextCheck<ApplicationDbContext>(name: "Application DB Context", failureStatus: HealthStatus.Degraded)
                 .AddUrlGroup(new Uri(appSettings.ApplicationDetail.ContactWebsite), name: "My personal website", failureStatus: HealthStatus.Degraded)
-                .AddNpgSql(configuration.GetConnectionString("OnionArchConn"));
+                .AddSqlServer(configuration.GetConnectionString("OnionArchConn"));
             
             serviceCollection.AddHealthChecksUI(setupSettings: setup =>
             {

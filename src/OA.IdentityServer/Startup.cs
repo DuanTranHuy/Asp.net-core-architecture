@@ -30,8 +30,8 @@ namespace OA.IdentityServer
         {
             services.AddControllersWithViews();
 
-            services.AddEntityFrameworkNpgsql().AddDbContext<IdentityContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("IdentityConnection")));
+            services.AddDbContext<IdentityContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<IdentityContext>()
